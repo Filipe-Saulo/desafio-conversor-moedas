@@ -18,10 +18,11 @@ export default function App() {
           //pegando o json da api
           const data = await res.json();
 
-          if (data.rates.CAD) setResult(data.rates.CAD);
-          if (data.rates.USD) setResult(data.rates.USD);
-          if (data.rates.EUR) setResult(data.rates.EUR);
-          if (data.rates.INR) setResult(data.rates.INR);
+          // if (data.rates.CAD) setResult(data.rates.CAD);
+          // if (data.rates.USD) setResult(data.rates.USD);
+          // if (data.rates.EUR) setResult(data.rates.EUR);
+          // if (data.rates.INR) setResult(data.rates.INR);
+          setResult(data.rates[moedaConvertida]);
         } catch (err) {
           // console.log(err);
         }
@@ -29,7 +30,7 @@ export default function App() {
 
       fetchMoedas();
     },
-    [value]
+    [value, moedaInserida, moedaConvertida]
   );
 
   return (
