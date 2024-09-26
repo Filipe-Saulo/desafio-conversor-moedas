@@ -6,12 +6,7 @@ export default function App() {
   const [value, setValue] = useState(null);
   const [moedaInserida, setMoedaInserida] = useState("EUR");
   const [moedaConvertida, setMoedaConvertida] = useState("CAD");
-  const [result, setResult] = useState();
-
-  function handleSetResult({ rates }) {
-    console.log(rates.CAD);
-    // setMoedaConvertida(moeda);
-  }
+  const [result, setResult] = useState(null);
 
   useEffect(
     function () {
@@ -22,12 +17,16 @@ export default function App() {
           );
           //pegando o json da api
           const data = await res.json();
-          handleSetResult(data.rates);
-          // console.log(data.rates);
+
+          if (data.rates.CAD) setResult(data.rates.CAD);
+          if (data.rates.USD) setResult(data.rates.USD);
+          if (data.rates.EUR) setResult(data.rates.EUR);
+          if (data.rates.INR) setResult(data.rates.INR);
         } catch (err) {
           // console.log(err);
         }
       }
+
       fetchMoedas();
     },
     [value]
@@ -36,19 +35,25 @@ export default function App() {
   return (
     <div>
       <input type="number" onChange={(e) => setValue(e.target.value)} />
-      <select>
+      <select
+        value={moedaInserida}
+        onChange={(e) => setMoedaInserida(e.target.value)}
+      >
         <option value="USD">USD</option>
         <option value="EUR">EUR</option>
         <option value="CAD">CAD</option>
         <option value="INR">INR</option>
       </select>
-      <select>
+      <select
+        value={moedaConvertida}
+        onChange={(e) => setMoedaConvertida(e.target.value)}
+      >
         <option value="USD">USD</option>
         <option value="EUR">EUR</option>
         <option value="CAD">CAD</option>
         <option value="INR">INR</option>
       </select>
-      <p>{}</p>
+      <p>{result}</p>
     </div>
   );
 }
