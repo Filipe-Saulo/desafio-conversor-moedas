@@ -3,22 +3,39 @@
 import { useEffect, useState } from "react";
 
 export default function App() {
-  useEffect(function () {
-    async function fetchMoedas() {
-      try {
-        const res = await fetch(
-          `https://api.frankfurter.app/latest?amount=100&from=EUR&to=USD`
-        );
-      } catch (err) {
-        console.log(err);
+  const [value, setValue] = useState(null);
+  const [moedaInserida, setMoedaInserida] = useState("EUR");
+  const [moedaConvertida, setMoedaConvertida] = useState("CAD");
+  const [result, setResult] = useState();
+
+  function handleSetResult({ rates }) {
+    console.log(rates.CAD);
+    // setMoedaConvertida(moeda);
+  }
+
+  useEffect(
+    function () {
+      async function fetchMoedas() {
+        try {
+          const res = await fetch(
+            `https://api.frankfurter.app/latest?amount=${value}&from=${moedaInserida}&to=${moedaConvertida}`
+          );
+          //pegando o json da api
+          const data = await res.json();
+          handleSetResult(data.rates);
+          // console.log(data.rates);
+        } catch (err) {
+          // console.log(err);
+        }
       }
-    }
-    fetchMoedas();
-  }, []);
+      fetchMoedas();
+    },
+    [value]
+  );
 
   return (
     <div>
-      <input type="text" />
+      <input type="number" onChange={(e) => setValue(e.target.value)} />
       <select>
         <option value="USD">USD</option>
         <option value="EUR">EUR</option>
@@ -31,7 +48,7 @@ export default function App() {
         <option value="CAD">CAD</option>
         <option value="INR">INR</option>
       </select>
-      <p>OUTPUT</p>
+      <p>{}</p>
     </div>
   );
 }
